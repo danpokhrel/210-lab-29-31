@@ -17,3 +17,11 @@ for simulate():
     }
 
 for splitStrBy():
+    string testStr1 = "a,b,2c,aSf,va3sfg,b_as,svesa";
+    string testStr2 = "1|245|21|235|23536|232";
+    vector<string> result1 = splitStrBy(testStr1, ',');
+    vector<string> result2 = splitStrBy(testStr2, '|');
+    for (auto str : result1)
+        cout << str << " ";
+    for (auto str:result2)
+        cout << str << " ";

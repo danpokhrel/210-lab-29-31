@@ -49,6 +49,7 @@ Define main function:
 using namespace std;
 
 const int ITER = 25;
+const string DATA_FILE = "data.txt";
 
 struct Organism{
     int age;
@@ -64,12 +65,7 @@ vector<string> splitStrBy(string str, char delimiter);
 int main(){
     map<int, array<list<Organism>, 3>> data;
 
-    data[5] = {list<Organism>{Organism(2, 10), Organism(5, 3)},
-               list<Organism>{Organism(1, 3), Organism(6, 7)},
-               list<Organism>{Organism(7), Organism(10)}};
-    
-    string testStr1 = "a,b,2c,aSf,va3sfg,b_as,svesa";
-    string testStr2 = "1|245|21|235|23536|232";
+    populateData(data);
 
     return 0;
 }
@@ -106,10 +102,39 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
     }
 }
 
+/* Data.txt format:
+    (int) ID of cell
+    Array of predators with elements separated by ','
+        Each element is two integers separated by '|'
+    Array of prey with elements separated by ','
+        Each element is two integers separated by '|'
+    Array of plants with elements separated by ','
+        Each element is an integer for age
+    (int) ID of cell
+    ...
+*/
 void populateData(map<int, array<list<Organism>, 3>> &data){
+    ifstream fin(DATA_FILE);
+    if(!fin.is_open()){
+        cout << "Unable to open file.";
+        return;
+    }
 
+    while(fin.good()){
+        string cellID; getline(fin, cellID);
+        string arr1; getline(fin, arr1);
+        string arr2; getline(fin, arr1);
+        string arr3; getline(fin, arr1);
+        
+    }
 }
 
 vector<string> splitStrBy(string str, char delimiter){
-
+    vector<string> splitStr;
+    stringstream ss(str);
+    string split;
+    while(getline(ss, split, delimiter))
+        splitStr.push_back(split);
+    
+    return splitStr;
 }
