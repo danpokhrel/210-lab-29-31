@@ -68,7 +68,14 @@ int main(){
     populateData(data);
     cout << data.size() << endl; // should be 25
     cout << (data[72][0]).front().age << endl; // should be 8
-    cout << (data[71][3]).back().age << endl; // should be 10
+    cout << (data[71][2]).back().age << endl; // should be 10
+    cout << endl;
+
+    for (int i = 0; i < ITER; i++)
+        simulate(data);
+    cout << data.size() << endl;
+    cout << (data[72][0]).front().age << endl;
+    cout << (data[71][2]).back().age << endl;
 
     return 0;
 }
@@ -127,8 +134,8 @@ void populateData(map<int, array<list<Organism>, 3>> &data){
         // Read the next 4 lines
         string cellID; getline(fin, cellID);
         string str1; getline(fin, str1);
-        string str2; getline(fin, str1);
-        string str3; getline(fin, str1);
+        string str2; getline(fin, str2);
+        string str3; getline(fin, str3);
 
         // Convert lines into proper variables
         int id = stoi(cellID);

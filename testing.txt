@@ -5,9 +5,9 @@ for data:
                list<Organism>{Organism(1, 3), Organism(6, 7)},
                list<Organism>{Organism(7), Organism(10)}};
 
-    cout << (data[5][1]).front().age << endl;
-    cout << (data[5][2]).back().age << endl;
-    cout << (data[5][3]).front().age << endl;
+    cout << (data[5][0]).front().age << endl;
+    cout << (data[5][1]).back().age << endl;
+    cout << (data[5][2]).front().age << endl;
 
 
 for simulate():
