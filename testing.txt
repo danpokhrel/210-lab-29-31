@@ -6,7 +6,7 @@ for data:
                list<Organism>{Organism(7), Organism(10)}};
 
     cout << (data[5][1]).front().age << endl;
-    cout << (data[5][2]).end().age << endl;
+    cout << (data[5][2]).back().age << endl;
     cout << (data[5][3]).front().age << endl;
 
 
@@ -25,3 +25,9 @@ for splitStrBy():
         cout << str << " ";
     for (auto str:result2)
         cout << str << " ";
+
+for populateData():
+    populateData(data);
+    cout << data.size() << endl; // should be 25
+    cout << (data[72][0]).front().age << endl; // should be 8
+    cout << (data[71][3]).back().age << endl; // should be 10

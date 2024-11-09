@@ -66,6 +66,9 @@ int main(){
     map<int, array<list<Organism>, 3>> data;
 
     populateData(data);
+    cout << data.size() << endl; // should be 25
+    cout << (data[72][0]).front().age << endl; // should be 8
+    cout << (data[71][3]).back().age << endl; // should be 10
 
     return 0;
 }
@@ -121,16 +124,19 @@ void populateData(map<int, array<list<Organism>, 3>> &data){
     }
 
     while(fin.good()){
+        // Read the next 4 lines
         string cellID; getline(fin, cellID);
         string str1; getline(fin, str1);
         string str2; getline(fin, str1);
         string str3; getline(fin, str1);
 
+        // Convert lines into proper variables
         int id = stoi(cellID);
         vector<string> vec1 = splitStrBy(str1, ',');
         vector<string> vec2 = splitStrBy(str2, ',');
         vector<string> vec3 = splitStrBy(str3, ',');
 
+        // Convert array elements into proper list objects
         list<Organism> orgs1, orgs2, orgs3;
         int age, hunger;
         for (auto str : vec1){
@@ -147,6 +153,9 @@ void populateData(map<int, array<list<Organism>, 3>> &data){
             age = stoi(str);
             orgs3.push_back(Organism(age));
         }
+
+        // Populate data object
+        data[id] = {orgs1, orgs2, orgs3};
     }
 }
 
