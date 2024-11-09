@@ -1,0 +1,2 @@
+My unit testing program will run the function several times using a series of parameters that span a range of data that the function is supposed to be able to handle. Then the program will validate the output of the function and print it to the terminal.
+

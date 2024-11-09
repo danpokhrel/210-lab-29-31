@@ -40,6 +40,8 @@ Define main function:
 */
 // COMSC-210 | Lab 29-31 | Dan Pokhrel
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <map>
 #include <array>
 #include <list>
