@@ -40,12 +40,16 @@ Define main function:
 */
 // COMSC-210 | Lab 29-31 | Dan Pokhrel
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <map>
 #include <array>
 #include <list>
+#include <vector>
 using namespace std;
 
 const int ITER = 25;
+const string DATA_FILE = "data.txt";
 
 struct Organism{
     int age;
@@ -55,18 +59,23 @@ struct Organism{
 };
 
 void simulate(map<int, array<list<Organism>, 3>> &data);
+void populateData(map<int, array<list<Organism>, 3>> &data);
+vector<string> splitStrBy(string str, char delimiter);
 
 int main(){
     map<int, array<list<Organism>, 3>> data;
 
-    data[5] = {list<Organism>{Organism(2, 10), Organism(5, 3)},
-               list<Organism>{Organism(1, 3), Organism(6, 7)},
-               list<Organism>{Organism(7), Organism(10)}};
-    
-    for (int i = 0; i < ITER; i++){
+    populateData(data);
+    cout << data.size() << endl; // should be 25
+    cout << (data[72][0]).front().age << endl; // should be 8
+    cout << (data[71][2]).back().age << endl; // should be 10
+    cout << endl;
+
+    for (int i = 0; i < ITER; i++)
         simulate(data);
-        cout << (data[5][2]).front().age << endl;
-    }
+    cout << data.size() << endl;
+    cout << (data[72][0]).front().age << endl;
+    cout << (data[71][2]).back().age << endl;
 
     return 0;
 }
@@ -101,4 +110,68 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
             // Do stuff
         }
     }
+}
+
+/* Data.txt format:
+    (int) ID of cell
+    Array of predators with elements separated by ','
+        Each element is two integers separated by '|'
+    Array of prey with elements separated by ','
+        Each element is two integers separated by '|'
+    Array of plants with elements separated by ','
+        Each element is an integer for age
+    (int) ID of cell
+    ...
+*/
+void populateData(map<int, array<list<Organism>, 3>> &data){
+    ifstream fin(DATA_FILE);
+    if(!fin.is_open()){
+        cout << "Unable to open file.";
+        return;
+    }
+
+    while(fin.good()){
+        // Read the next 4 lines
+        string cellID; getline(fin, cellID);
+        string str1; getline(fin, str1);
+        string str2; getline(fin, str2);
+        string str3; getline(fin, str3);
+
+        // Convert lines into proper variables
+        int id = stoi(cellID);
+        vector<string> vec1 = splitStrBy(str1, ',');
+        vector<string> vec2 = splitStrBy(str2, ',');
+        vector<string> vec3 = splitStrBy(str3, ',');
+
+        // Convert array elements into proper list objects
+        list<Organism> orgs1, orgs2, orgs3;
+        int age, hunger;
+        for (auto str : vec1){
+            auto pair = splitStrBy(str, '|');
+            age = stoi(pair[0]); hunger = stoi(pair[1]);
+            orgs1.push_back(Organism(age, hunger));
+        }
+        for (auto str : vec2){
+            auto pair = splitStrBy(str, '|');
+            age = stoi(pair[0]); hunger = stoi(pair[1]);
+            orgs2.push_back(Organism(age, hunger));
+        }
+        for (auto str : vec3){
+            age = stoi(str);
+            orgs3.push_back(Organism(age));
+        }
+
+        // Populate data object
+        data[id] = {orgs1, orgs2, orgs3};
+    }
+}
+
+vector<string> splitStrBy(string str, char delimiter){
+    vector<string> splitStr;
+    stringstream ss(str);
+    string split;
+    while(getline(ss, split, delimiter))
+        splitStr.push_back(split);
+    
+    return splitStr;
 }
