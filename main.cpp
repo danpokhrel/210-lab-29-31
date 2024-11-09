@@ -45,6 +45,7 @@ Define main function:
 #include <map>
 #include <array>
 #include <list>
+#include <vector>
 using namespace std;
 
 const int ITER = 25;
@@ -57,6 +58,8 @@ struct Organism{
 };
 
 void simulate(map<int, array<list<Organism>, 3>> &data);
+void populateData(map<int, array<list<Organism>, 3>> &data);
+vector<string> splitStrBy(string str, char delimiter);
 
 int main(){
     map<int, array<list<Organism>, 3>> data;
@@ -65,10 +68,8 @@ int main(){
                list<Organism>{Organism(1, 3), Organism(6, 7)},
                list<Organism>{Organism(7), Organism(10)}};
     
-    for (int i = 0; i < ITER; i++){
-        simulate(data);
-        cout << (data[5][2]).front().age << endl;
-    }
+    string testStr1 = "a,b,2c,aSf,va3sfg,b_as,svesa";
+    string testStr2 = "1|245|21|235|23536|232";
 
     return 0;
 }
@@ -103,4 +104,12 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
             // Do stuff
         }
     }
+}
+
+void populateData(map<int, array<list<Organism>, 3>> &data){
+
+}
+
+vector<string> splitStrBy(string str, char delimiter){
+
 }
