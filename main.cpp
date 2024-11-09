@@ -122,10 +122,31 @@ void populateData(map<int, array<list<Organism>, 3>> &data){
 
     while(fin.good()){
         string cellID; getline(fin, cellID);
-        string arr1; getline(fin, arr1);
-        string arr2; getline(fin, arr1);
-        string arr3; getline(fin, arr1);
-        
+        string str1; getline(fin, str1);
+        string str2; getline(fin, str1);
+        string str3; getline(fin, str1);
+
+        int id = stoi(cellID);
+        vector<string> vec1 = splitStrBy(str1, ',');
+        vector<string> vec2 = splitStrBy(str2, ',');
+        vector<string> vec3 = splitStrBy(str3, ',');
+
+        list<Organism> orgs1, orgs2, orgs3;
+        int age, hunger;
+        for (auto str : vec1){
+            auto pair = splitStrBy(str, '|');
+            age = stoi(pair[0]); hunger = stoi(pair[1]);
+            orgs1.push_back(Organism(age, hunger));
+        }
+        for (auto str : vec2){
+            auto pair = splitStrBy(str, '|');
+            age = stoi(pair[0]); hunger = stoi(pair[1]);
+            orgs2.push_back(Organism(age, hunger));
+        }
+        for (auto str : vec3){
+            age = stoi(str);
+            orgs3.push_back(Organism(age));
+        }
     }
 }
 
