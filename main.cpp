@@ -53,7 +53,7 @@ using namespace std;
 const int ITER = 25;
 //               Predator, Prey, Plant
 const int LIFESPAN[] = {10, 8, 15};
-const int REPRODUCE_RATE[] = {20, 30, 50};
+const int REPRODUCE_RATE[] = {10, 12, 6};
 const string DATA_FILE = "data.txt";
 
 struct Organism{
@@ -105,8 +105,17 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
     }
     for (auto it = data.begin(); it != data.end(); ++it){
         list<Organism> &preys = it->second[1];
+        list<Organism> &plants = it->second[2];
+        int food = plants.size();
         for (Organism &prey : preys){
-            // Eat
+            if (food = 0) // No food, hunger increases
+                prey.hunger++;
+            else if (prey.hunger > 0 && food = 1) // only one food, eat and hunger stays the same
+                plants.pop_back();
+            else if (prey.hunger > 0){ // more than 1 food, eat two and hunger goes down by 1
+                plants.pop_back(); plants.pop_back();
+                prey.hunger --;
+            }
         }
     }
     for (auto it = data.begin(); it != data.end(); ++it){
