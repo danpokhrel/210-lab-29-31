@@ -75,6 +75,7 @@ int main(){
     map<int, array<list<Organism>, 3>> data;
 
     populateData(data);
+    displayData(data);
 
     for (int i = 0; i < ITER; i++){
         simulate(data);
@@ -106,8 +107,8 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
     for (auto it = data.begin(); it != data.end(); ++it){
         list<Organism> &preys = it->second[1];
         list<Organism> &plants = it->second[2];
-        int food = plants.size();
         for (Organism &prey : preys){
+            int food = plants.size();
             if (food == 0) // No food, hunger increases
                 prey.hunger++;
             else if (prey.hunger > 0 && food == 1) // only one food, eat and hunger stays the same
@@ -123,8 +124,8 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
     for (auto it = data.begin(); it != data.end(); ++it){
         list<Organism> &predators = it->second[0];
         list<Organism> &preys = it->second[1];
-        int food = preys.size();
         for (Organism &pred : predators){
+            int food = preys.size();
             if (food == 0) // No food, hunger increases
                 pred.hunger++;
             else if (pred.hunger > 0 && food == 1) // only one food, eat and hunger stays the same
