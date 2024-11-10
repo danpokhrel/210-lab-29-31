@@ -47,11 +47,13 @@ Define main function:
 #include <array>
 #include <list>
 #include <vector>
+#include <random>
 using namespace std;
 
 const int ITER = 25;
 //               Predator, Prey, Plant
 const int LIFESPAN[] = {10, 8, 15};
+const float REPRODUCE_RATE[] = {0.2, 0.3, 0.5};
 const string DATA_FILE = "data.txt";
 
 struct Organism{
@@ -65,6 +67,7 @@ void simulate(map<int, array<list<Organism>, 3>> &data);
 void populateData(map<int, array<list<Organism>, 3>> &data);
 void displayData(map<int, array<list<Organism>, 3>> &data);
 vector<string> splitStrBy(string str, char delimiter);
+bool probability(int percent);
 
 int main(){
     map<int, array<list<Organism>, 3>> data;
@@ -89,8 +92,12 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
         // Die from old age
         orgs.remove_if([i](Organism &org) { return org.age > LIFESPAN[i]; });
     }
-    for (int i = 0; i < 3; i++){
-        // Reproduce
+    for (auto it = data.begin(); it != data.end(); ++it)
+    for (int i = 0; i < 3; i ++){
+        list<Organism> &orgs = it->second[i];
+        for (auto org : orgs){
+
+        }
     }
     for (auto it = data.begin(); it != data.end(); ++it){
         list<Organism> &preys = it->second[1];
@@ -183,11 +190,16 @@ void displayData(map<int, array<list<Organism>, 3>> &data){
             int prey = (data[id][1]).size();
             int plants = (data[id][2]).size();
 
+            // Convert to string and convert "0" to "_"
             string predStr = to_string(predators);
             string preyStr = to_string(prey);
             string plantStr = to_string(plants);
+            if (predators == 0) predStr = "_";
+            if (prey == 0) preyStr = "_";
+            if (plants == 0) plantStr = "_";
+
             // Formatted output
-            cout << left << predators << "," << prey << "," << setw(4) << plants;
+            cout << left << predStr << "," << preyStr << "," << setw(4) << plantStr;
         }
         cout << endl;
     }
@@ -202,4 +214,9 @@ vector<string> splitStrBy(string str, char delimiter){
         splitStr.push_back(split);
     
     return splitStr;
+}
+
+bool probability(int percent){
+    int x = rand() % 100;
+    return x < percent;
 }
