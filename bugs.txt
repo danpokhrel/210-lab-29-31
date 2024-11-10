@@ -6,3 +6,5 @@
     s. Write code to display "0" as "_"
 4. No reproduction was happening
     s. It was because REPRODUCE_RATE was a float so I changed it to int
+5. Populations were dying out too quickly
+    s. Change moving part of simulation to have organism move to the cell with the most food
