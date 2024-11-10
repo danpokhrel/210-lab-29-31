@@ -40,6 +40,7 @@ Define main function:
 */
 // COMSC-210 | Lab 29-31 | Dan Pokhrel
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <map>
@@ -60,6 +61,7 @@ struct Organism{
 
 void simulate(map<int, array<list<Organism>, 3>> &data);
 void populateData(map<int, array<list<Organism>, 3>> &data);
+void displayData(map<int, array<list<Organism>, 3>> &data);
 vector<string> splitStrBy(string str, char delimiter);
 
 int main(){
@@ -73,9 +75,8 @@ int main(){
 
     for (int i = 0; i < ITER; i++)
         simulate(data);
-    cout << data.size() << endl;
-    cout << (data[72][0]).front().age << endl;
-    cout << (data[71][2]).back().age << endl;
+    
+    displayData(data);
 
     return 0;
 }
@@ -164,6 +165,24 @@ void populateData(map<int, array<list<Organism>, 3>> &data){
         // Populate data object
         data[id] = {orgs1, orgs2, orgs3};
     }
+}
+
+/* Region ID:
+    1  2  3  4  5  6  7  8  9  10
+    11 12 13 14 15 16 17 18 19 20
+    21 22 23 24 25 26 27 28 29 30
+    ...
+*/
+void displayData(map<int, array<list<Organism>, 3>> &data){
+    cout << "----------------------------------------\n";
+    for (int x = 1; x <= 10; x++){
+        for (int y = 1; y <= 10; y++){
+            int id = (y-1)*10 + x;
+            cout << setw(4) << id;
+        }
+        cout << endl;
+    }
+    cout << "----------------------------------------\n";
 }
 
 vector<string> splitStrBy(string str, char delimiter){
