@@ -1,0 +1,2 @@
+1. The alignment of the output from displayData is off
+    s. Add "cout << left"

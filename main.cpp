@@ -68,10 +68,6 @@ int main(){
     map<int, array<list<Organism>, 3>> data;
 
     populateData(data);
-    cout << data.size() << endl; // should be 25
-    cout << (data[72][0]).front().age << endl; // should be 8
-    cout << (data[71][2]).back().age << endl; // should be 10
-    cout << endl;
 
     for (int i = 0; i < ITER; i++)
         simulate(data);
@@ -175,10 +171,15 @@ void populateData(map<int, array<list<Organism>, 3>> &data){
 */
 void displayData(map<int, array<list<Organism>, 3>> &data){
     cout << "----------------------------------------\n";
-    for (int x = 1; x <= 10; x++){
-        for (int y = 1; y <= 10; y++){
-            int id = (y-1)*10 + x;
-            cout << setw(4) << id;
+    for (int y = 1; y <= 10; y++){
+        for (int x = 1; x <= 10; x++){ // Loop through each cell
+            int id = (y-1)*10 + x; // cell id
+            // Find number of predator,prey,plant in cell
+            int predators = (data[id][0]).size();
+            int prey = (data[id][1]).size();
+            int plants = (data[id][2]).size();
+            // Formatted output
+            cout << left << setw(4) << predators << "," << prey << "," << plants;
         }
         cout << endl;
     }
