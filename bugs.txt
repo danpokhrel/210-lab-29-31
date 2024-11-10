@@ -1,2 +1,5 @@
 1. The alignment of the output from displayData is off
-    s. Add "cout << left"
+    s. On line 182, move setw(4) to be before plants and add left the the beginning of the cout
+2. The dashes at the start and end of displayData does not cover the contents
+    s. Double the number of dashes in the cout
+3. 

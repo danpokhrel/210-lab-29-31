@@ -50,6 +50,8 @@ Define main function:
 using namespace std;
 
 const int ITER = 25;
+//               Predator, Prey, Plant
+const int LIFESPAN[] = {10, 8, 15};
 const string DATA_FILE = "data.txt";
 
 struct Organism{
@@ -82,7 +84,10 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
     for (int i = 0; i < 3; i ++){ // Loop through all organisms
         list<Organism> &orgs = it->second[i];
         for (Organism &org : orgs){
-            org.age++;
+            org.age++; // Age by one day
+            
+            if (org.age > LIFESPAN[i])
+                orgs.remove(org); // Dies of old age
         }
     }
     for (int i = 0; i < 3; i++){
@@ -170,7 +175,7 @@ void populateData(map<int, array<list<Organism>, 3>> &data){
     ...
 */
 void displayData(map<int, array<list<Organism>, 3>> &data){
-    cout << "----------------------------------------\n";
+    cout << "------------------------------------------------------------------------------\n";
     for (int y = 1; y <= 10; y++){
         for (int x = 1; x <= 10; x++){ // Loop through each cell
             int id = (y-1)*10 + x; // cell id
@@ -179,11 +184,11 @@ void displayData(map<int, array<list<Organism>, 3>> &data){
             int prey = (data[id][1]).size();
             int plants = (data[id][2]).size();
             // Formatted output
-            cout << left << setw(4) << predators << "," << prey << "," << plants;
+            cout << left << predators << "," << prey << "," << setw(4) << plants;
         }
         cout << endl;
     }
-    cout << "----------------------------------------\n";
+    cout << "------------------------------------------------------------------------------\n";
 }
 
 vector<string> splitStrBy(string str, char delimiter){
