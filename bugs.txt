@@ -4,3 +4,5 @@
     s. Double the number of dashes in the cout
 3. Having lots of 0s in displayData makes it hard to read
     s. Write code to display "0" as "_"
+4. No reproduction was happening
+    s. It was because REPRODUCE_RATE was a float so I changed it to int

@@ -53,7 +53,7 @@ using namespace std;
 const int ITER = 25;
 //               Predator, Prey, Plant
 const int LIFESPAN[] = {10, 8, 15};
-const float REPRODUCE_RATE[] = {0.2, 0.3, 0.5};
+const int REPRODUCE_RATE[] = {20, 30, 50};
 const string DATA_FILE = "data.txt";
 
 struct Organism{
@@ -70,6 +70,8 @@ vector<string> splitStrBy(string str, char delimiter);
 bool probability(int percent);
 
 int main(){
+    srand(time(0));
+
     map<int, array<list<Organism>, 3>> data;
 
     populateData(data);
@@ -95,9 +97,11 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
     for (auto it = data.begin(); it != data.end(); ++it)
     for (int i = 0; i < 3; i ++){
         list<Organism> &orgs = it->second[i];
-        for (auto org : orgs){
 
-        }
+        // For each organism, reproduce based on random chance
+        for (auto org : orgs)
+        if (probability(REPRODUCE_RATE[i]))
+            orgs.push_back(Organism(0, 10)); // new born
     }
     for (auto it = data.begin(); it != data.end(); ++it){
         list<Organism> &preys = it->second[1];
