@@ -50,7 +50,7 @@ Define main function:
 #include <random>
 using namespace std;
 
-const int ITER = 25;
+const int ITER = 25, HUNGER_MAX = 5;
 //               Predator, Prey, Plant
 const int LIFESPAN[] = {10, 8, 15};
 const int REPRODUCE_RATE[] = {10, 12, 6};
@@ -108,20 +108,31 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
         list<Organism> &plants = it->second[2];
         int food = plants.size();
         for (Organism &prey : preys){
-            if (food = 0) // No food, hunger increases
+            if (food == 0) // No food, hunger increases
                 prey.hunger++;
-            else if (prey.hunger > 0 && food = 1) // only one food, eat and hunger stays the same
+            else if (prey.hunger > 0 && food == 1) // only one food, eat and hunger stays the same
                 plants.pop_back();
             else if (prey.hunger > 0){ // more than 1 food, eat two and hunger goes down by 1
                 plants.pop_back(); plants.pop_back();
-                prey.hunger --;
+                prey.hunger -= 1;
             }
         }
+        // Die from hunger
+        preys.remove_if([](Organism &prey) { return prey.hunger >= HUNGER_MAX; });
     }
     for (auto it = data.begin(); it != data.end(); ++it){
         list<Organism> &predators = it->second[0];
+        list<Organism> &preys = it->second[1];
+        int food = preys.size();
         for (Organism &pred : predators){
-            // Eat
+            if (food == 0) // No food, hunger increases
+                pred.hunger++;
+            else if (pred.hunger > 0 && food == 1) // only one food, eat and hunger stays the same
+                preys.pop_back();
+            else if (pred.hunger > 0){ // more than 1 food, eat two and hunger goes down by 1
+                preys.pop_back(); preys.pop_back();
+                pred.hunger--;
+            }
         }
     }
     for (auto it = data.begin(); it != data.end(); ++it)
