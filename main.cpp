@@ -71,10 +71,10 @@ int main(){
 
     populateData(data);
 
-    for (int i = 0; i < ITER; i++)
+    for (int i = 0; i < ITER; i++){
         simulate(data);
-    
-    displayData(data);
+        displayData(data);
+    }
 
     return 0;
 }
@@ -83,12 +83,11 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
     for (auto it = data.begin(); it != data.end(); ++it)
     for (int i = 0; i < 3; i ++){ // Loop through all organisms
         list<Organism> &orgs = it->second[i];
-        for (Organism &org : orgs){
+        for (Organism &org : orgs)
             org.age++; // Age by one day
-            
-            if (org.age > LIFESPAN[i])
-                orgs.remove(org); // Dies of old age
-        }
+
+        // Die from old age
+        orgs.remove_if([i](Organism &org) { return org.age > LIFESPAN[i]; });
     }
     for (int i = 0; i < 3; i++){
         // Reproduce
@@ -183,12 +182,16 @@ void displayData(map<int, array<list<Organism>, 3>> &data){
             int predators = (data[id][0]).size();
             int prey = (data[id][1]).size();
             int plants = (data[id][2]).size();
+
+            string predStr = to_string(predators);
+            string preyStr = to_string(prey);
+            string plantStr = to_string(plants);
             // Formatted output
             cout << left << predators << "," << prey << "," << setw(4) << plants;
         }
         cout << endl;
     }
-    cout << "------------------------------------------------------------------------------\n";
+    cout << "------------------------------------------------------------------------------\n\n";
 }
 
 vector<string> splitStrBy(string str, char delimiter){

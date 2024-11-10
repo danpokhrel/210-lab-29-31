@@ -2,4 +2,5 @@
     s. On line 182, move setw(4) to be before plants and add left the the beginning of the cout
 2. The dashes at the start and end of displayData does not cover the contents
     s. Double the number of dashes in the cout
-3. 
+3. Having lots of 0s in displayData makes it hard to read
+    s. Write code to display "0" as "-"
