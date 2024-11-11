@@ -61,7 +61,6 @@ struct Organism{
     int hunger;
     Organism(int a) {age = a; hunger = -1;} // For plants only
     Organism(int a, int h) {age = a; hunger = h;}
-    Organism operator==(const Organism &other) {return age==other.age && hunger==other.hunger;}
 };
 
 void simulate(map<int, array<list<Organism>, 3>> &data);
@@ -97,15 +96,26 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
         // Die from old age
         orgs.remove_if([i](Organism &org) { return org.age > LIFESPAN[i]; });
     }
-    // Reproduction
+    // Reproduction for prey and predators
     for (auto it = data.begin(); it != data.end(); ++it)
-    for (int i = 0; i < 3; i ++){
+    for (int i = 0; i < 2; i ++){
         list<Organism> &orgs = it->second[i];
 
         // For each organism, reproduce based on random chance
         for (auto org : orgs)
         if (probability(REPRODUCE_RATE[i]))
             orgs.push_back(Organism(0, 10)); // new born
+    }
+    // Reproduction for plants
+    for (auto it = data.begin(); it != data.end(); ++it){
+        list<Organism> &orgs = it->second[2];
+
+        // For each organism, reproduce based on random chance
+        for (auto org : orgs)
+        if (probability(REPRODUCE_RATE[2])){
+            int newID = rand()%100 + 1; // Find which cell it will grow in
+            data[newID][2].push_back(Organism(0, 10)); // new born
+        }
     }
     // Prey Hunger
     for (auto it = data.begin(); it != data.end(); ++it){
@@ -143,12 +153,14 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
     for (auto it = data.begin(); it != data.end(); ++it)
     for (int i = 0; i < 2; i ++){ // Loop through every prey and predator
         list<Organism> &orgs = it->second[i];
-        for (Organism &org : orgs)
+        for (auto it = orgs.begin(); it != orgs.end(); it++){
+            Organism org = *it;
             if (probability(MOVE_PERCENT)){
                 int newID = rand()%100 + 1; // ID of new cell it's moving to
                 data[newID][i].push_back(org); // Copy to new cell
-                if(org == orgs.front()){}
+                orgs.erase(it);
             }
+        }
     }
 }
 

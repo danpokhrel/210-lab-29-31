@@ -8,3 +8,7 @@
     s. It was because REPRODUCE_RATE was a float so I changed it to int
 5. Populations were dying out too quickly
     s. Change moving part of simulation to have organism move to the cell with the most food
+6. Two organisms in a list with the same age and hunger could both get deleted in the move portion of the simulation
+    s. Replace remove() with erase() and an iterator to one specific element
+7. Animals that move to other cells die out because most cells don't have any plants
+    s. Make plant reproduction independent of cell of parent
