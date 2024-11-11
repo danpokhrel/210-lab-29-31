@@ -1,0 +1,20 @@
+1. The alignment of the output from displayData is off
+    s. On line 182, move setw(4) to be before plants and add left the the beginning of the cout
+2. The dashes at the start and end of displayData does not cover the contents
+    s. Double the number of dashes in the cout
+3. Having lots of 0s in displayData makes it hard to read
+    s. Write code to display "0" as "_"
+4. No reproduction was happening
+    s. It was because REPRODUCE_RATE was a float so I changed it to int
+5. Populations were dying out too quickly
+    s. Change moving part of simulation to have organism move to the cell with the most food
+6. Two organisms in a list with the same age and hunger could both get deleted in the move portion of the simulation
+    s. Replace remove() with erase() and an iterator to one specific element
+7. Animals that move to other cells die out because most cells don't have any plants
+    s. Make plant reproduction independent of cell of parent
+8. Animals are still dying out too quickly
+    s. Unsolved, nothing I tried fixed the problem
+9. Looping through organisms sometimes causes a read access violation
+    s. Store orgs we want to delete in a new vector and delete them after the Loop
+10. The output can't handle large numbers
+    s. Increase margins

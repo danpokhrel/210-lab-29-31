@@ -40,15 +40,20 @@ Define main function:
 */
 // COMSC-210 | Lab 29-31 | Dan Pokhrel
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <sstream>
 #include <map>
 #include <array>
 #include <list>
 #include <vector>
+#include <random>
 using namespace std;
 
-const int ITER = 25;
+const int ITER = 25, HUNGER_MAX = 15, MOVE_PERCENT = 50;
+//               Predator, Prey, Plant
+const int LIFESPAN[] = {15, 10, 20};
+const int REPRODUCE_RATE[] = {10, 35, 40};
 const string DATA_FILE = "data.txt";
 
 struct Organism{
@@ -60,54 +65,101 @@ struct Organism{
 
 void simulate(map<int, array<list<Organism>, 3>> &data);
 void populateData(map<int, array<list<Organism>, 3>> &data);
+void displayData(map<int, array<list<Organism>, 3>> &data);
 vector<string> splitStrBy(string str, char delimiter);
+bool probability(int percent);
 
 int main(){
+    srand(time(0));
+
     map<int, array<list<Organism>, 3>> data;
 
     populateData(data);
-    cout << data.size() << endl; // should be 25
-    cout << (data[72][0]).front().age << endl; // should be 8
-    cout << (data[71][2]).back().age << endl; // should be 10
-    cout << endl;
+    displayData(data);
 
-    for (int i = 0; i < ITER; i++)
+    for (int i = 0; i < ITER; i++){
         simulate(data);
-    cout << data.size() << endl;
-    cout << (data[72][0]).front().age << endl;
-    cout << (data[71][2]).back().age << endl;
+        displayData(data);
+    }
 
     return 0;
 }
 
 void simulate(map<int, array<list<Organism>, 3>> &data){
+    // Aging
     for (auto it = data.begin(); it != data.end(); ++it)
     for (int i = 0; i < 3; i ++){ // Loop through all organisms
         list<Organism> &orgs = it->second[i];
-        for (Organism &org : orgs){
-            org.age++;
+        for (Organism &org : orgs)
+            org.age++; // Age by one day
+
+        // Die from old age
+        orgs.remove_if([i](Organism &org) { return org.age > LIFESPAN[i]; });
+    }
+    // Reproduction for prey and predators
+    for (auto it = data.begin(); it != data.end(); ++it)
+    for (int i = 0; i < 2; i ++){
+        list<Organism> &orgs = it->second[i];
+
+        // For each organism, reproduce based on random chance
+        for (auto org : orgs)
+        if (probability(REPRODUCE_RATE[i]))
+            orgs.push_back(Organism(0, 10)); // new born
+    }
+    // Reproduction for plants
+    for (auto it = data.begin(); it != data.end(); ++it){
+        list<Organism> &orgs = it->second[2];
+
+        // For each organism, reproduce based on random chance
+        for (auto org : orgs)
+        if (probability(REPRODUCE_RATE[2])){
+            int newID = rand()%100 + 1; // Find which cell it will grow in
+            data[newID][2].push_back(Organism(0, 10)); // new born
         }
     }
-    for (int i = 0; i < 3; i++){
-        // Reproduce
-    }
+    // Prey Hunger
     for (auto it = data.begin(); it != data.end(); ++it){
         list<Organism> &preys = it->second[1];
+        list<Organism> &plants = it->second[2];
         for (Organism &prey : preys){
-            // Eat
+            int food = plants.size();
+            if (food == 0) // No food, hunger increases
+                prey.hunger++;
+            else{
+                plants.pop_back();
+                prey.hunger -= 1;
+            }
         }
+        // Die from hunger
+        preys.remove_if([](Organism &prey) { return prey.hunger >= HUNGER_MAX; });
     }
+    // Predator Hunger
     for (auto it = data.begin(); it != data.end(); ++it){
         list<Organism> &predators = it->second[0];
+        list<Organism> &preys = it->second[1];
         for (Organism &pred : predators){
-            // Eat
+            int food = preys.size();
+            if (food == 0) // No food, hunger increases
+                pred.hunger++;
+            else{
+                preys.pop_back();
+                pred.hunger--;
+            }
         }
+        // Die from hunger
+        predators.remove_if([](Organism &pred) { return pred.hunger >= HUNGER_MAX; });
     }
+    // Moving
     for (auto it = data.begin(); it != data.end(); ++it)
     for (int i = 0; i < 2; i ++){ // Loop through every prey and predator
         list<Organism> &orgs = it->second[i];
-        for (Organism &org : orgs){
-            // Do stuff
+        for (auto it = orgs.begin(); it != orgs.end(); it++){
+            Organism org = *it;
+            if (probability(MOVE_PERCENT)){
+                int newID = rand()%100 + 1; // ID of new cell it's moving to
+                data[newID][i].push_back(org); // Copy to new cell
+                orgs.erase(it);
+            }
         }
     }
 }
@@ -166,6 +218,38 @@ void populateData(map<int, array<list<Organism>, 3>> &data){
     }
 }
 
+/* Region ID:
+    1  2  3  4  5  6  7  8  9  10
+    11 12 13 14 15 16 17 18 19 20
+    21 22 23 24 25 26 27 28 29 30
+    ...
+*/
+void displayData(map<int, array<list<Organism>, 3>> &data){
+    cout << "------------------------------------------------------------------------------\n";
+    for (int y = 1; y <= 10; y++){
+        for (int x = 1; x <= 10; x++){ // Loop through each cell
+            int id = (y-1)*10 + x; // cell id
+            // Find number of predator,prey,plant in cell
+            int predators = (data[id][0]).size();
+            int prey = (data[id][1]).size();
+            int plants = (data[id][2]).size();
+
+            // Convert to string and convert "0" to "_"
+            string predStr = to_string(predators);
+            string preyStr = to_string(prey);
+            string plantStr = to_string(plants);
+            if (predators == 0) predStr = "_";
+            if (prey == 0) preyStr = "_";
+            if (plants == 0) plantStr = "_";
+
+            // Formatted output
+            cout << left << predStr << "," << preyStr << "," << setw(8) << plantStr;
+        }
+        cout << endl;
+    }
+    cout << "------------------------------------------------------------------------------\n\n";
+}
+
 vector<string> splitStrBy(string str, char delimiter){
     vector<string> splitStr;
     stringstream ss(str);
@@ -174,4 +258,9 @@ vector<string> splitStrBy(string str, char delimiter){
         splitStr.push_back(split);
     
     return splitStr;
+}
+
+bool probability(int percent){
+    int x = rand() % 100;
+    return x < percent;
 }

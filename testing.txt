@@ -31,3 +31,13 @@ for populateData():
     cout << data.size() << endl; // should be 25
     cout << (data[72][0]).front().age << endl; // should be 8
     cout << (data[71][3]).back().age << endl; // should be 10
+
+for probability():
+    for (int i = 0; i <= 100; i++){
+        int avg = 0;
+        for (int x = 0; x < 1000; x++){
+            if (probability(i)) avg += 100;
+        }
+        avg /= 1000;
+        cout << avg << endl;
+    }
