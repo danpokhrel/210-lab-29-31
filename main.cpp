@@ -61,6 +61,7 @@ struct Organism{
     int hunger;
     Organism(int a) {age = a; hunger = -1;} // For plants only
     Organism(int a, int h) {age = a; hunger = h;}
+    Organism operator==(const Organism &other) {return age==other.age && hunger==other.hunger;}
 };
 
 void simulate(map<int, array<list<Organism>, 3>> &data);
@@ -142,9 +143,12 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
     for (auto it = data.begin(); it != data.end(); ++it)
     for (int i = 0; i < 2; i ++){ // Loop through every prey and predator
         list<Organism> &orgs = it->second[i];
-        for (Organism &org : orgs){
-            // Do stuff
-        }
+        for (Organism &org : orgs)
+            if (probability(MOVE_PERCENT)){
+                int newID = rand()%100 + 1; // ID of new cell it's moving to
+                data[newID][i].push_back(org); // Copy to new cell
+                if(org == orgs.front()){}
+            }
     }
 }
 
