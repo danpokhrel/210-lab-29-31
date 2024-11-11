@@ -50,10 +50,10 @@ Define main function:
 #include <random>
 using namespace std;
 
-const int ITER = 25, HUNGER_MAX = 5, MOVE_PERCENT = 20;
+const int ITER = 25, HUNGER_MAX = 3, MOVE_PERCENT = 40;
 //               Predator, Prey, Plant
-const int LIFESPAN[] = {10, 8, 15};
-const int REPRODUCE_RATE[] = {10, 12, 6};
+const int LIFESPAN[] = {15, 10, 15};
+const int REPRODUCE_RATE[] = {6, 12, 15};
 const string DATA_FILE = "data.txt";
 
 struct Organism{
@@ -133,7 +133,7 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
         // Die from hunger
         preys.remove_if([](Organism &prey) { return prey.hunger >= HUNGER_MAX; });
     }
-    // Predator Hunger
+/*     // Predator Hunger
     for (auto it = data.begin(); it != data.end(); ++it){
         list<Organism> &predators = it->second[0];
         list<Organism> &preys = it->second[1];
@@ -148,7 +148,7 @@ void simulate(map<int, array<list<Organism>, 3>> &data){
         }
         // Die from hunger
         predators.remove_if([](Organism &pred) { return pred.hunger >= HUNGER_MAX; });
-    }
+    } */
     // Moving
     for (auto it = data.begin(); it != data.end(); ++it)
     for (int i = 0; i < 2; i ++){ // Loop through every prey and predator

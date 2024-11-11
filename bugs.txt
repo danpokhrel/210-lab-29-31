@@ -12,3 +12,5 @@
     s. Replace remove() with erase() and an iterator to one specific element
 7. Animals that move to other cells die out because most cells don't have any plants
     s. Make plant reproduction independent of cell of parent
+8. Animals are still dying out too quickly
+    s. 
