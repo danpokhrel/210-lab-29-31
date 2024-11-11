@@ -50,10 +50,10 @@ Define main function:
 #include <random>
 using namespace std;
 
-const int ITER = 25, HUNGER_MAX = 10, MOVE_PERCENT = 50;
+const int ITER = 25, HUNGER_MAX = 15, MOVE_PERCENT = 50;
 //               Predator, Prey, Plant
-const int LIFESPAN[] = {10, 10, 20};
-const int REPRODUCE_RATE[] = {10, 20, 40};
+const int LIFESPAN[] = {15, 10, 20};
+const int REPRODUCE_RATE[] = {10, 35, 40};
 const string DATA_FILE = "data.txt";
 
 struct Organism{
@@ -243,7 +243,7 @@ void displayData(map<int, array<list<Organism>, 3>> &data){
             if (plants == 0) plantStr = "_";
 
             // Formatted output
-            cout << left << predStr << "," << preyStr << "," << setw(4) << plantStr;
+            cout << left << predStr << "," << preyStr << "," << setw(8) << plantStr;
         }
         cout << endl;
     }

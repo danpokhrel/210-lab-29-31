@@ -13,7 +13,8 @@
 7. Animals that move to other cells die out because most cells don't have any plants
     s. Make plant reproduction independent of cell of parent
 8. Animals are still dying out too quickly
-    s. Add more plants to data.txt and tune lifespan and reproduction rates
+    s. Unsolved, nothing I tried fixed the problem
 9. Looping through organisms sometimes causes a read access violation
     s. Store orgs we want to delete in a new vector and delete them after the Loop
-10.
+10. The output can't handle large numbers
+    s. Increase margins
