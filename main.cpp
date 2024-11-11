@@ -50,9 +50,9 @@ Define main function:
 #include <random>
 using namespace std;
 
-const int ITER = 25, HUNGER_MAX = 10, MOVE_PERCENT = 30;
+const int ITER = 25, HUNGER_MAX = 10, MOVE_PERCENT = 50;
 //               Predator, Prey, Plant
-const int LIFESPAN[] = {200, 200, 200};
+const int LIFESPAN[] = {10, 10, 20};
 const int REPRODUCE_RATE[] = {10, 20, 40};
 const string DATA_FILE = "data.txt";
 
